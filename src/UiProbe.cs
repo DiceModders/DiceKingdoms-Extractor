@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using BepInEx;
-using DiceModders.Shared;
+using DiceModders.ModCore.Tools;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +10,7 @@ using UnityEngine.UI;
 namespace DiceModders.Extractor;
 
 /// <summary>
-/// Right Ctrl + U (Extractor mod): writes the game's whole UI hierarchy (every active-or-not canvas, object names, components, sizes, texts, button labels)
+/// Settings > Extractor > UI hierarchy: writes the game's whole UI hierarchy (every active-or-not canvas, object names, components, sizes, texts, button labels)
 /// to BepInEx/DiceKingdoms_ui.txt. Used to find the game's own "?" / menu buttons and its look, so the editor can hook in exactly.
 /// </summary>
 internal static class UiProbe
@@ -34,9 +34,9 @@ internal static class UiProbe
                 Walk(c.transform, 0, sb);
             }
             File.WriteAllText(OutputPath, sb.ToString());
-            ModPlugin.L.LogMessage($"[ui] UI hierarchy of {canvases} canvas(es) written to {OutputPath}");
+            Plugin.L.LogMessage($"[ui] UI hierarchy of {canvases} canvas(es) written to {OutputPath}");
         }
-        catch (Exception e) { ModPlugin.L.LogError("[ui] dump failed: " + e); }
+        catch (Exception e) { Plugin.L.LogError("[ui] dump failed: " + e); }
     }
 
     private static void Walk(Transform t, int depth, StringBuilder sb)

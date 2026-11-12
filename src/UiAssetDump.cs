@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using BepInEx;
-using DiceModders.Shared;
+using DiceModders.ModCore.Tools;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.InteropTypes;
 using TMPro;
@@ -15,7 +15,7 @@ using UnityEngine.UI;
 namespace DiceModders.Extractor;
 
 /// <summary>
-/// Right Ctrl + I (Extractor mod): writes BepInEx/DiceKingdoms_ui_assets.txt - a deep dump of the game's UI so native look-and-feel can be reused:
+/// Settings > Extractor > UI assets: writes BepInEx/DiceKingdoms_ui_assets.txt - a deep dump of the game's UI so native look-and-feel can be reused:
 ///  * every object under the game's canvases with its REAL component class names (the plain hierarchy dump only shows "Component"),
 ///  * Image sprites (name, 9-slice border, pixels per unit, type, colour, material), TMP fonts / sizes / colours, Button transitions and click targets,
 ///  * all fields of the game's own components (BaseButton, ButtonIcon, ButtonLabel, panels ...) via reflection,
@@ -67,7 +67,7 @@ internal static class UiAssetDump
             _className = t.GetMethod("il2cpp_class_get_name", new[] { typeof(IntPtr) });
             _classNs = t.GetMethod("il2cpp_class_get_namespace", new[] { typeof(IntPtr) });
         }
-        catch (Exception e) { ModPlugin.L.LogWarning("[uidump] native class lookup unavailable: " + e.Message); }
+        catch (Exception e) { Plugin.L.LogWarning("[uidump] native class lookup unavailable: " + e.Message); }
     }
 
     /// <summary>The real il2cpp class name of an object ("Image", "ButtonIcon" ...), not the declared wrapper type.</summary>
@@ -283,8 +283,8 @@ internal static class UiAssetDump
             }
             DumpSprites(sb);
             File.WriteAllText(OutputPath, sb.ToString());
-            ModPlugin.L.LogMessage($"[uidump] {canvases} canvas(es) + sprite/font inventory written to {OutputPath} ({sb.Length / 1024} KB)");
+            Plugin.L.LogMessage($"[uidump] {canvases} canvas(es) + sprite/font inventory written to {OutputPath} ({sb.Length / 1024} KB)");
         }
-        catch (Exception e) { ModPlugin.L.LogError("[uidump] failed: " + e); }
+        catch (Exception e) { Plugin.L.LogError("[uidump] failed: " + e); }
     }
 }

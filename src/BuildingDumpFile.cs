@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using BepInEx;
-using DiceModders.Shared;
+using DiceModders.ModCore.Tools;
 using Il2CppInterop.Runtime;
 using UnityEngine;
 
@@ -21,9 +21,9 @@ internal static class BuildingDumpFile
         try
         {
             object types = FindBuildingTypes();
-            if (types == null) { ModPlugin.L.LogWarning("[buildings] BuildingTypes not found - join a match (bottom-bar building panels visible) and try again."); return; }
+            if (types == null) { Plugin.L.LogWarning("[buildings] BuildingTypes not found - join a match (bottom-bar building panels visible) and try again."); return; }
             IntPtr arr = Mem.PtrOf(Reflect.Call(types, "get_Types"));
-            if (arr == IntPtr.Zero) { ModPlugin.L.LogWarning("[buildings] get_Types() returned null."); return; }
+            if (arr == IntPtr.Zero) { Plugin.L.LogWarning("[buildings] get_Types() returned null."); return; }
             int len = Mem.ArrayLength(arr);
             var file = new StringBuilder();
             for (int i = 0; i < len; i++)
@@ -32,9 +32,9 @@ internal static class BuildingDumpFile
                 file.Append(bt == IntPtr.Zero ? $"{i}: (null)" : Describe(i, bt)).Append("\r\n");
             }
             File.WriteAllText(OutputPath, file.ToString());
-            ModPlugin.L.LogMessage($"[buildings] {len} building types written to {OutputPath}");
+            Plugin.L.LogMessage($"[buildings] {len} building types written to {OutputPath}");
         }
-        catch (Exception e) { ModPlugin.L.LogError("[buildings] dump failed: " + e); }
+        catch (Exception e) { Plugin.L.LogError("[buildings] dump failed: " + e); }
     }
 
     private static object FindBuildingTypes()
