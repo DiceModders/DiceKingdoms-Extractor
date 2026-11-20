@@ -20,7 +20,7 @@ public sealed class Plugin : BasePlugin
 {
     public const string Guid = "org.dicemodders.dicekingdoms.extractor";
     public const string Name = "DiceKingdoms Extractor";
-    public const string Version = "3.0.0";
+    public const string Version = "1.0.0";
 
     internal static ManualLogSource L;
 
